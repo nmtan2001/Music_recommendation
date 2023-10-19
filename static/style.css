@@ -1,0 +1,20 @@
+body {
+    background-color: #fefae0;
+    color: #dda15e;
+}
+
+a {
+    color: #bc6c25;
+}
+
+.btn {
+    background-color: #bc6c25;
+    border-color: #bc6c25;
+    color: white;
+}
+
+.btn:hover {
+    background-color: #dda15e;
+    border-color: #dda15e;
+    color: white;
+}

@@ -1,0 +1,74 @@
+from powershell: wsl, then code .
+run: python3 filename.py
+
+apt (advande packaging tool): get code from the wild onto local computer->install libs and stuffs
+sudo apt-get update: update apt
+
+projects stored aas repositories
+commit: each saved version 
+each commit stores changes made sice the previos commit, identified through commit hash
+remotes: local repo can be associated with other repositories hosted elsewhere 
+working copy: dir in local system with files
+staging area: set of tracked changed
+
+COMMANDS: 
+git clone <URL>: create copy of existing remote repo
+=>view/run/contribute existing codebase
+git init: makes the currect dir a git repo.
+=>make pj from scratch
+
+-saving changes:
++git add <files>: tracks specified file(s) by adding to staging area. git add . to add everything in folder
++git commit -m "commit msg": saves tracaked changed in the form of a commit
++git push: push local commits to remote repo
+
+-udoing changes:
++git revert<commit>: revert a commit by creatign a new commit does exactly the opposite.
+-> can be specified using commit hash or HEAD~n syntax (nth last commit, HEAD~1 -> last commit)
+
+-other:
++git status: display state of repo and staging area
++git log: displays log of previous commits in the currently check-out branch
++git diff: display changes made
++git request
++git rebase -i
+
+-collab:
++git pull: download changes/commits that have been pushed by others
+and merge with your own local repo ( do a fetch and merge together, kinda)
+=> useful when collab with others
+
+link with github:
+create new repo on github till step 2,
+git remote set-url origin https://github.com/nmtan2001/git-seminar.git: set up account on vs
+git push --set-upstream origin main
+then git push like step 3
+
+BRANCHES:
+-like pointers to commits.
+ Ex:             
+            main
+              |
+com1<-com2<-com3<-com4
+                    |
+                    |
+                feature
+-useful for working on new feature, fixing bugs,... without affecting main working branch
+-once completed, can be merged to main branch
+
+-commands:
++git branch <branchname>: create branch that point to current commit(not switch branch)
++git checkout -b <branchname>: create and switch to new branch
++git checkout <branchname>: switch to new branch
++git push -u origin <branch-name>: push new branch
+
+PULL REQUESTS:
+-not a git feature
+-> request to merge changes that made to a branch to another branch(usually the main branch)
+
+MERGE CONFLICT:
+happens when similar lines of code get commit
+=> resolve manually by choosing which one's good
+
+For using in VS Code: https://code.visualstudio.com/docs/sourcecontrol/overview#_working-in-a-git-repository
+fuser -k port/tcp
