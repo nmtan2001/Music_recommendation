@@ -5,8 +5,7 @@ import numpy as np
 import pandas as pd
 
 df = pd.read_csv('df.csv')
-# df.head(10)
-
+dYear = pd.read_csv('dfYear.csv')
 # Normalize the music features using Min-Max scaling
 scaler = MinMaxScaler()
 music_features = df[['danceability', 'energy', 'key', 'mode',
@@ -87,8 +86,8 @@ song_name = "Lemon"
 recommendations = hybrid_recommendations(song_name, num_recommendations=5)
 
 # Print the recommendations.
-print(f"Hybrid recommended songs for '{song_name}':")
-print(recommendations)
+# print(f"Hybrid recommended songs for '{song_name}':")
+# print(recommendations)
 
 
 # Identify the rows that have the value 'YOASOBI' in the 'artist' column
