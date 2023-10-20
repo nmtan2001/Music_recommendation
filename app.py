@@ -5,17 +5,19 @@ import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.model_selection import train_test_split
+from algo import test, printout
 
-df = pd.read_csv('df.csv')
-df.head(10)
-# from helpers import apology, login_required, lookup, usd
+df = pd.read_csv('final.csv')
 
 # Configure application
-# app = Flask(__name__)
+app = Flask(__name__)
 
 
-# @app.route("/")
-# def index():
-#     lists = [i for i in range(1, 4)]
-#     lists1 = [i for i in range(4, 7)]
-#     return render_template("index.html", lists=lists, lists1=lists1)
+@app.route("/")
+def index():
+    lists = [i for i in range(1, 4)]
+    lists1 = [i for i in range(4, 7)]
+    names = list(df['track_name'].values)
+    artists = list(df['artists'].values)
+    size = len(artists)
+    return render_template("index.html",  names=names, artists=artists, size=size)
