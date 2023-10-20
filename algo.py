@@ -73,14 +73,6 @@ def hybrid_recommendations(input_song_name, num_recommendations=5, alpha=0.5):
         'popularity':  df.loc[df['track_name'] == input_song_name, 'popularity'].values[0]
     }])])
 
-    # hybrid_recommendations = hybrid_recommendations.append({
-    #     'track_name': input_song_name,
-    #     'artists': df.loc[df['track_name'] == input_song_name, 'artists'].values[0],
-    #     'album_name': df.loc[df['track_name'] == input_song_name, 'album_name'].values[0],
-    #     'track_id': df.loc[df['track_name'] == input_song_name, 'track_id'].values[0],
-    #     'popularity':  df.loc[df['track_name'] == input_song_name, 'popularity'].values[0]
-    # }, ignore_index=True)
-
     # Sort the hybrid recommendations based on weighted popularity score
     hybrid_recommendations = hybrid_recommendations.sort_values(
         by='popularity', ascending=False)
