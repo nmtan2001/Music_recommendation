@@ -102,12 +102,16 @@ def hybrid_recommendations(input_song_name, num_recommendations=5, alpha=0.5):
     return hybrid_recommendations
 
 
-def printout(song_name, num_recommendations):
+def printout(song_id, num_recommendations=5):
+    song_name = df.loc[song_id, 'track_name']
     recommendations = hybrid_recommendations(song_name, num_recommendations)
+    return recommendations
     # Print the recommendations.
-    print(f"Hybrid recommended songs for '{song_name}':")
-    print(recommendations)
+    # print(f"Hybrid recommended songs for '{song_name}':")
+    # print(recommendations)
 
+
+# printout('0')
 
 # Identify the rows that have the value 'YOASOBI' in the 'artist' column
 rows_to_print = df[df['artists'].isin(['YOASOBI'])].index

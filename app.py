@@ -15,10 +15,15 @@ app = Flask(__name__)
 
 @app.route("/recommendation", methods=["POST"])
 def recommendation():
-    req = request.form.get('song-name')
-    songid = request.form.get('songid')
-    songs = recomm(songid)
-    return render_template('index.html', songs=songs)
+    # req = request.form.get('song-name')
+    # songid = request.form.get('answer-hidden')
+    returndf = printout(1)
+    returnsongs = list(returndf['track_name'].values)
+    names = list(df['track_name'].values)
+    artists = list(df['artists'].values)
+    id = list(df['track_id'].values)
+    size = len(artists)
+    return render_template("index.html",  names=names, artists=artists, size=size, id=id, returnsongs=returnsongs)
 
 
 @app.route("/")
