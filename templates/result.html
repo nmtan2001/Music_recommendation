@@ -13,7 +13,7 @@
             <input type="hidden" name="song-name" id="answer-hidden">
         </div>
 
-        <button style="margin-top:20px; " type="submit" class="btn btn-primary btn-lg">Recommend</button>
+        <button style="margin-top:20px; " type="submit" class="btn btn-lg">Recommend</button>
     </form>
 </div>
 
@@ -44,31 +44,14 @@
 
 {%block result %}
 <div class="row mx-5 px-5 mt-4 pt-4">
-    {% for i in range(0,3)%}
-    <div class="col-sm-4 mb-3 mb-sm-0">
+    {% for i in range(size1)%}
+    <div class="col-sm-4 mb-3 pb-4 mb-sm-0">
         <div class="card">
             <div class="card-body">
-                <!-- <h5 class="card-title">Special title treatment</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
-                <p>Name: {{returnsongs[i]}}</p>
-                <p>Artist: {{returnartists[i]}}</p>
-                <p>Album: {{returnalbum[i]}}</p>
-                <a href="http://open.spotify.com/track/{{returnid[i]}}" class="btn btn-primary">Listen on Spotify</a>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
-</div>
-
-<div class="row mx-5 px-5 mt-4 pt-4">
-    {% for list in lists1%}
-    <div class="col-sm-4 mb-3 mb-sm-0">
-        <div class="card">
-            <div class="card-body">
-                <!-- <h5 class="card-title">Special title treatment</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
-                {{list}}
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+                <h5 class="card-title">{{returnsongs[i]}}</h5>
+                <p class="card-text">Artist: {{returnartists[i]}}</p>
+                <p class="card-text">Album: {{returnalbum[i]}}</p>
+                <a href="http://open.spotify.com/track/{{returnid[i]}}" class="btn">Listen on Spotify</a>
             </div>
         </div>
     </div>

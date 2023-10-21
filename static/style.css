@@ -18,3 +18,9 @@ a {
     border-color: #dda15e;
     color: white;
 }
+
+.btn:active {
+    background-color: #dda15e;
+    border-color: #dda15e;
+    color: white;
+}
