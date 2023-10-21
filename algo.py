@@ -111,7 +111,7 @@ def printout(song_id, num_recommendations=5):
     # print(recommendations)
 
 
-# printout('0')
+# printout(5)
 
 # Identify the rows that have the value 'YOASOBI' in the 'artist' column
 rows_to_print = df[df['artists'].isin(['YOASOBI'])].index
