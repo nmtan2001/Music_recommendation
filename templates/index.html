@@ -7,36 +7,13 @@
             <input type="text" name="song-name" id="song-name" list="song-list" class="form-control">
             <datalist id="song-list">
                 {%for i in range(size) :%}
-                <option data-value="{{i}}" value="{{names[i]}} - {{artists[i]}} "></option>
+                <option value="{{names[i]}} - {{artists[i]}} "></option>
                 {% endfor%}
             </datalist>
-            <input type="hidden" name="song-name" id="answer-hidden">
         </div>
 
-        <button style="margin-top:20px; " type="submit" class="btn">Recommend</button>
+        <button style="margin-top:20px; " type="submit" class="btn btn-lg">Recommend</button>
     </form>
 </div>
 
-<script>
-
-    document.querySelector('input[list]').addEventListener('input', function (e) {
-        var input = e.target,
-            list = input.getAttribute('list'),
-            options = document.querySelectorAll('#' + list + ' option'),
-            hiddenInput = document.getElementById(input.getAttribute('id') + '-hidden'),
-            label = input.value;
-
-        hiddenInput.value = label;
-
-        for (var i = 0; i < options.length; i++) {
-            var option = options[i];
-
-            if (option.innerText === label) {
-                hiddenInput.value = option.getAttribute('data-value');
-                console.log(hiddenInput.value)
-                break;
-            }
-        }
-    });
-</script>
 {% endblock %}
