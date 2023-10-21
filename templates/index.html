@@ -1,13 +1,14 @@
 {% extends "layout.html" %}
 {% block body%}
 <div class="mx-5 px-5 mt-4">
-    <form action="" method="post" class="px-5 mx-5">
+    <form action="/recommendation" method="get" class="px-5 mx-5">
         <div class="form-group">
             <label for="song-name" class="fs-5">Select song</label>
             <input type="text" name="song-name" id="song-name" list="song-list" class="form-control">
             <datalist id="song-list">
                 {%for i in range(size) :%}
-                <option value="{{artists[i]}} - {{names[i]}}"></option>
+                <input id="songid" name="songid" type="hidden" value="{{id[i]}}">
+                <option id="songname" value="{{names[i]}} - {{artists[i]}} "></option>
                 {% endfor%}
             </datalist>
         </div>
@@ -17,6 +18,7 @@
 </div>
 
 {% endblock %}
+
 {%block result %}
 <div class="row mx-5 px-5 mt-4 pt-4">
     {% for list in lists%}
