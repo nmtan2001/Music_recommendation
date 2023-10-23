@@ -5,7 +5,7 @@ import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.model_selection import train_test_split
-from algo import test, printout
+from algo import test, printout, content_based_recommendations
 from html.parser import HTMLParser
 
 df = pd.read_csv('final.csv')
@@ -18,10 +18,10 @@ app = Flask(__name__)
 def recommendation():
     song_request = request.form.get("song-name")
     song_name, artist_name = song_request.split(" by ")
+    # test(song_name, artist_name)
+    # return render_template("test.html", song=song_name, art=artist_name, test=test)
 
-    # return render_template("test.html", song=song_name, art=artist_name)
-
-    returndf = printout(song_name, artist_name)
+    returndf = content_based_recommendations(song_name, 'Rill')
 
     # display result
     returnsongs = list(returndf['track_name'].values)

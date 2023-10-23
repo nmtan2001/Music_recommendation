@@ -16,8 +16,10 @@ music_features = df[['danceability', 'energy', 'key', 'mode',
 music_features_scaled = scaler.fit_transform(music_features)
 
 
-def test():
-    print("hello world")
+def test(a, b):
+    print(a)
+    print(b)
+    return a
 
 
 def calculate_weighted_popularity(release_date):
@@ -40,7 +42,13 @@ def content_based_recommendations(input_song_name, input_artist_name, num_recomm
     art = (df['artists'].str.contains(
         input_artist_name, case=False, na=False))
 
+    print(song.head())
+    print(art.head())
+    print(input_song_name)
+    print(input_artist_name)
+
     matching_song_indices = df[song & art].index
+    print(matching_song_indices[0])
     # If no songs match the input song name, return an empty list.
     # if not matching_song_indices.any() :
     #     return []
@@ -63,18 +71,19 @@ def content_based_recommendations(input_song_name, input_artist_name, num_recomm
     return content_based_recommendations
 
 
-def printoutt(song_name, artist_name, num_recommendations=5):
-    song_name = 'Into The Night'
-    artist_name = 'YOASOBI'
-    recommendations = content_based_recommendations(
-        song_name, artist_name, num_recommendations)
-    # return recommendations
-    # Print the recommendations.
-    print(f"Hybrid recommended songs for '{song_name}':")
-    print(recommendations)
+# def printoutt(song_name, artist_name, num_recommendations=5):
+#     # song_name = 'Tief'
+#     # artist_name = 'Paul Kalkbrenner'
+#     recommendations = content_based_recommendations(
+#         song_name, artist_name, num_recommendations)
+#     return recommendations
+#     # Print the recommendations.
+#     print(f"CB recommended songs for '{song_name}':")
+#     print(recommendations)
 
 
-printoutt('Into The Night', 'YOASOBI')
+print(content_based_recommendations('Lolly', 'Rill'))
+
 
 # a function to get hybrid recommendations based on weighted popularity
 
