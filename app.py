@@ -17,7 +17,9 @@ app = Flask(__name__)
 @app.route("/recommendation", methods=["POST"])
 def recommendation():
     song_request = request.form.get("song-name")
-    song_name, artist_name = song_request.split("-")
+    song_name, artist_name = song_request.split(" by ")
+
+    # return render_template("test.html", song=song_name, art=artist_name)
 
     returndf = printout(song_name, artist_name)
 

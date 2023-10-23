@@ -7,7 +7,7 @@
             <input type="text" name="song-name" id="song-name" list="song-list" class="form-control">
             <datalist id="song-list">
                 {%for i in range(size) :%}
-                <option value="{{names[i]}} - {{artists[i]}} "></option>
+                <option value="{{names[i]}} by {{artists[i]}} "></option>
                 {% endfor%}
             </datalist>
         </div>

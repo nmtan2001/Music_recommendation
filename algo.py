@@ -8,7 +8,6 @@ import pandas as pd
 
 df = pd.read_csv('final.csv')
 
-
 # Normalize the music features using Min-Max scaling
 scaler = MinMaxScaler()
 music_features = df[['danceability', 'energy', 'key', 'mode',
@@ -64,7 +63,22 @@ def content_based_recommendations(input_song_name, input_artist_name, num_recomm
     return content_based_recommendations
 
 
+def printoutt(song_name, artist_name, num_recommendations=5):
+    song_name = 'Into The Night'
+    artist_name = 'YOASOBI'
+    recommendations = content_based_recommendations(
+        song_name, artist_name, num_recommendations)
+    # return recommendations
+    # Print the recommendations.
+    print(f"Hybrid recommended songs for '{song_name}':")
+    print(recommendations)
+
+
+printoutt('Into The Night', 'YOASOBI')
+
 # a function to get hybrid recommendations based on weighted popularity
+
+
 def hybrid_recommendations(input_song_name, input_artist_name, num_recommendations=5, alpha=0.5):
 
     # if input_song_name not in df['track_name'].values:
@@ -110,7 +124,7 @@ def hybrid_recommendations(input_song_name, input_artist_name, num_recommendatio
 
 def printout(song_name, artist_name, num_recommendations=5):
     # song_name = 'Into The Night'
-    artist_name = 'YOASOBI'
+    # artist_name = 'YOASOBI'
     recommendations = hybrid_recommendations(
         song_name, artist_name, num_recommendations)
     return recommendations
