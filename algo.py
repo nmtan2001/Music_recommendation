@@ -1,4 +1,5 @@
 import datetime
+from flask import Flask, render_template
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.model_selection import train_test_split
@@ -55,10 +56,10 @@ def content_based_recommendations(input_song_name, input_artist_name, num_recomm
         input_artist_name, case=False, na=False))
 
     matching_song_indices = df[song & art].index
-    print(matching_song_indices[0])
+    # print(matching_song_indices[0])
     # If no songs match the input song name, return an empty list.
-    # if not matching_song_indices.any() :
-    #     return []
+    if len(matching_song_indices) == 0:
+        return
 
     # Get the index of the input song in the dataset.
     input_song_index = matching_song_indices[0]
@@ -78,19 +79,27 @@ def content_based_recommendations(input_song_name, input_artist_name, num_recomm
     return content_based_recommendations
 
 
+def printoutt(song_name, artist_name, num_recommendations=6):
+    recommendations = content_based_recommendations(
+        song_name, artist_name, num_recommendations)
+    print(f"Hybrid recommended songs for '{song_name}':")
+    print(recommendations)
+    return recommendations
+
+
+# if printoutt('aaaaaa', 'bbbbbb') is None:
+#     print('0')
 # a function to get hybrid recommendations based on weighted popularity
 
 
 def hybrid_recommendations(input_song_name, input_artist_name, num_recommendations=5, alpha=0.5):
 
-    # if input_song_name not in df['track_name'].values:
-    #     print(
-    #         f"'{input_song_name}' not found in the dataset. Please enter a valid song name.")
-    #     return
-
     # Get content-based recommendations
     content_based_rec = content_based_recommendations(
         input_song_name, input_artist_name, num_recommendations)
+
+    if content_based_rec is None:
+        return
 
     # Get the indices of the songs in the dataset that match the input song name.
     song = (df['track_name'].str.contains(
@@ -130,3 +139,27 @@ def printout(song_name, artist_name, num_recommendations=6):
     # print(f"Hybrid recommended songs for '{song_name}':")
     # print(recommendations)
     return recommendations
+
+
+# if printout('Lolly', 'Rill') is None:
+#     print('oh no')
+
+
+def apology(message, code=400):
+    """Render message as an apology to user."""
+    names = list(df['track_name'].values)
+    artists = list(df['artists'].values)
+    id = list(df['track_id'].values)
+    size = len(artists)
+
+    def escape(s):
+        """
+        Escape special characters.
+
+        https://github.com/jacebrowning/memegen#special-characters
+        """
+        for old, new in [("-", "--"), (" ", "-"), ("_", "__"), ("?", "~q"),
+                         ("%", "~p"), ("#", "~h"), ("/", "~s"), ("\"", "''")]:
+            s = s.replace(old, new)
+        return s
+    return render_template("apology.html", top=code, bottom=escape(message),  names=names, artists=artists, size=size, id=id), code

@@ -5,7 +5,7 @@ import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.model_selection import train_test_split
-from algo import printout
+from algo import printout, apology, content_based_recommendations
 
 df = pd.read_csv('final.csv')
 
@@ -25,8 +25,10 @@ def recommendation():
     if song_name is None:
         return apology("wrong format", 400)
 
-    returndf = printout(song_name, artist_name)
+    if printout(song_name, artist_name) is None:
+        return apology("no match")
 
+    returndf = printout(song_name, artist_name)
     # display result
     returnsongs = list(returndf['track_name'].values)
     returnartists = list(returndf['artists'].values)
@@ -60,23 +62,3 @@ def handleSplit(song_request):
         artist_name = None
 
     return song_name, artist_name
-
-
-def apology(message, code=400):
-    """Render message as an apology to user."""
-    names = list(df['track_name'].values)
-    artists = list(df['artists'].values)
-    id = list(df['track_id'].values)
-    size = len(artists)
-
-    def escape(s):
-        """
-        Escape special characters.
-
-        https://github.com/jacebrowning/memegen#special-characters
-        """
-        for old, new in [("-", "--"), (" ", "-"), ("_", "__"), ("?", "~q"),
-                         ("%", "~p"), ("#", "~h"), ("/", "~s"), ("\"", "''")]:
-            s = s.replace(old, new)
-        return s
-    return render_template("apology.html", top=code, bottom=escape(message),  names=names, artists=artists, size=size, id=id), code
