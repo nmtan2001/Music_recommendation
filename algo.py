@@ -42,10 +42,10 @@ def content_based_recommendations(input_song_name, input_artist_name, num_recomm
     art = (df['artists'].str.contains(
         input_artist_name, case=False, na=False))
 
-    print(song.head())
-    print(art.head())
-    print(input_song_name)
-    print(input_artist_name)
+    # print(song.head())
+    # print(art.head())
+    # print(input_song_name)
+    # print(input_artist_name)
 
     matching_song_indices = df[song & art].index
     print(matching_song_indices[0])
@@ -82,7 +82,7 @@ def content_based_recommendations(input_song_name, input_artist_name, num_recomm
 #     print(recommendations)
 
 
-print(content_based_recommendations('Lolly', 'Rill'))
+# print(content_based_recommendations('Lolly', 'Rill'))
 
 
 # a function to get hybrid recommendations based on weighted popularity

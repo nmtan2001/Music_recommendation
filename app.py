@@ -20,11 +20,7 @@ def recommendation():
     song_name, artist_name = song_request.split(" by ")
     # return render_template("test.html", song=song_name, art=artist_name, test=test)
 
-    returndf = printout("Lolly", "Rill")
-
-    # returndf = content_based_recommendations(song_name, artist_name)
-
-    # returndf = content_based_recommendations(song_name, artist_name)
+    returndf = printout(song_name, artist_name)
 
     # display result
     returnsongs = list(returndf['track_name'].values)

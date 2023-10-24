@@ -31,7 +31,21 @@
                 href="facebook.com/tan.ngominh.73">Facebook</a>
         </h6>
     </div>
-    {%block body %} {% endblock %}
+    <div class="mx-5 px-5 mt-4">
+        <form action="/recommendation" method="post" class="px-5 mx-5">
+            <div class="form-group">
+                <label for="song-name" class="fs-5">Select song</label>
+                <input type="text" name="song-name" id="song-name" list="song-list" class="form-control">
+                <datalist id="song-list">
+                    {%for i in range(size) :%}
+                    <option value="{{names[i]}} by {{artists[i]}}"></option>
+                    {% endfor%}
+                </datalist>
+            </div>
+
+            <button style="margin-top:20px; " type="submit" class="btn btn-lg">Recommend</button>
+        </form>
+    </div>
     {%block result %} {%endblock %}
 
     <script>
