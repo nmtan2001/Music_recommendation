@@ -1,11 +1,13 @@
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.model_selection import train_test_split
+from datetime import datetime
+
 import numpy as np
 import pandas as pd
 
-df = pd.read_csv('df.csv')
-dYear = pd.read_csv('dfYear.csv')
+df = pd.read_csv('final.csv')
+
 # Normalize the music features using Min-Max scaling
 scaler = MinMaxScaler()
 music_features = df[['danceability', 'energy', 'key', 'mode',
@@ -14,17 +16,42 @@ music_features = df[['danceability', 'energy', 'key', 'mode',
 music_features_scaled = scaler.fit_transform(music_features)
 
 
-def content_based_recommendations(input_song_name, num_recommendations=5):
-    # Convert the input song name to lowercase.
-    input_song_name = input_song_name.lower()
+def test(a, b):
+    print(a)
+    print(b)
+    return a
+
+
+def calculate_weighted_popularity(release_date):
+    # Convert the release date to datetime object
+    release_date = datetime.strptime(release_date, '%Y-%m-%d')
+
+    # Calculate the time span between release date and today's date
+    time_span = datetime.now() - release_date
+
+    # Calculate the weighted popularity score based on time span (e.g., more recent releases have higher weight)
+    weight = 1 / (time_span.days + 1)
+    return weight
+
+
+def content_based_recommendations(input_song_name, input_artist_name, num_recommendations=5):
 
     # Get the indices of the songs in the dataset that match the input song name.
-    matching_song_indices = df[df['track_name'].str.lower(
-    ) == input_song_name].index
+    song = (df['track_name'].str.contains(
+        input_song_name, case=False, na=False))
+    art = (df['artists'].str.contains(
+        input_artist_name, case=False, na=False))
 
+    print(song.head())
+    print(art.head())
+    print(input_song_name)
+    print(input_artist_name)
+
+    matching_song_indices = df[song & art].index
+    print(matching_song_indices[0])
     # If no songs match the input song name, return an empty list.
-    if not matching_song_indices.any():
-        return []
+    # if not matching_song_indices.any() :
+    #     return []
 
     # Get the index of the input song in the dataset.
     input_song_index = matching_song_indices[0]
@@ -44,24 +71,46 @@ def content_based_recommendations(input_song_name, num_recommendations=5):
     return content_based_recommendations
 
 
-# a function to get hybrid recommendations based on weighted popularity
-def hybrid_recommendations(input_song_name, num_recommendations=5, alpha=0.5):
+# def printoutt(song_name, artist_name, num_recommendations=5):
+#     # song_name = 'Tief'
+#     # artist_name = 'Paul Kalkbrenner'
+#     recommendations = content_based_recommendations(
+#         song_name, artist_name, num_recommendations)
+#     return recommendations
+#     # Print the recommendations.
+#     print(f"CB recommended songs for '{song_name}':")
+#     print(recommendations)
 
-    if input_song_name not in df['track_name'].values:
-        print(
-            f"'{input_song_name}' not found in the dataset. Please enter a valid song name.")
-        return
+
+print(content_based_recommendations('Lolly', 'Rill'))
+
+
+# a function to get hybrid recommendations based on weighted popularity
+
+
+def hybrid_recommendations(input_song_name, input_artist_name, num_recommendations=5, alpha=0.5):
+
+    # if input_song_name not in df['track_name'].values:
+    #     print(
+    #         f"'{input_song_name}' not found in the dataset. Please enter a valid song name.")
+    #     return
 
     # Get content-based recommendations
     content_based_rec = content_based_recommendations(
-        input_song_name, num_recommendations)
+        input_song_name, input_artist_name, num_recommendations)
 
-    # Get the popularity score of the input song
-    popularity_score = df.loc[df['track_name'] ==
-                              input_song_name, 'popularity'].values[0]
+    # Get the indices of the songs in the dataset that match the input song name.
+    song = (df['track_name'].str.contains(
+        input_song_name, case=False, na=False))
+    art = (df['artists'].str.contains(
+        input_artist_name, case=False, na=False))
+
+    matching_song_indices = df[song & art].index[0]
+    # # Get the popularity score of the input song
+    popularity_score = df.loc[matching_song_indices, 'popularity']
     # Calculate the weighted popularity score
-    # weighted_popularity_score = popularity_score * calculate_weighted_popularity(df.loc[df['track_name'] == input_song_name, 'Release Date'].values[0])
-
+    weighted_popularity_score = popularity_score * calculate_weighted_popularity(
+        df.loc[matching_song_indices, 'release'])
     # Combine content-based and popularity-based recommendations based on weighted popularity
     hybrid_recommendations = content_based_rec
     hybrid_recommendations = pd.concat([hybrid_recommendations,  pd.DataFrame.from_records([{
@@ -69,7 +118,7 @@ def hybrid_recommendations(input_song_name, num_recommendations=5, alpha=0.5):
         'artists': df.loc[df['track_name'] == input_song_name, 'artists'].values[0],
         'album_name': df.loc[df['track_name'] == input_song_name, 'album_name'].values[0],
         'track_id': df.loc[df['track_name'] == input_song_name, 'track_id'].values[0],
-        'popularity':  df.loc[df['track_name'] == input_song_name, 'popularity'].values[0]
+        'popularity': weighted_popularity_score
     }])])
 
     # Sort the hybrid recommendations based on weighted popularity score
@@ -82,19 +131,19 @@ def hybrid_recommendations(input_song_name, num_recommendations=5, alpha=0.5):
     return hybrid_recommendations
 
 
-song_name = "Lemon"
-recommendations = hybrid_recommendations(song_name, num_recommendations=5)
+def printout(song_name, artist_name, num_recommendations=5):
+    # song_name = 'Into The Night'
+    # artist_name = 'YOASOBI'
+    recommendations = hybrid_recommendations(
+        song_name, artist_name, num_recommendations)
+    print(f"Hybrid recommended songs for '{song_name}':")
+    print(recommendations)
+    return recommendations
+    # Print the recommendations.
+    print(f"Hybrid recommended songs for '{song_name}':")
+    print(recommendations)
 
-# Print the recommendations.
-# print(f"Hybrid recommended songs for '{song_name}':")
-# print(recommendations)
 
+# printout('Into The Night', 'YOASOBI')
 
-# Identify the rows that have the value 'YOASOBI' in the 'artist' column
-rows_to_print = df[df['artists'].isin(['YOASOBI'])].index
-
-# Select the identified rows
-df_filtered = df.loc[rows_to_print]
-
-# Print the selected rows
-# print(df_filtered['track_name'])
+# printout(5)

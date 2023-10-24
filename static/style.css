@@ -3,7 +3,17 @@ body {
     color: #dda15e;
 }
 
-a {
+h1 a {
+    color: #dda15e;
+    text-decoration: none;
+}
+
+h1 a:visited {
+    color: #dda15e;
+    text-decoration: none;
+}
+
+h6 a {
     color: #bc6c25;
 }
 
@@ -14,6 +24,12 @@ a {
 }
 
 .btn:hover {
+    background-color: #dda15e;
+    border-color: #dda15e;
+    color: white;
+}
+
+.btn:active {
     background-color: #dda15e;
     border-color: #dda15e;
     color: white;

@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% block body%}
+<div class="mx-5 px-5 mt-4">
+    <form action="/recommendation" method="post" class="px-5 mx-5">
+        <div class="form-group">
+            <label for="song-name" class="fs-5">Select song</label>
+            <input type="text" name="song-name" id="song-name" list="song-list" class="form-control">
+            <datalist id="song-list">
+                {%for i in range(size) :%}
+                <option data-value="{{i}}" value="{{names[i]}} by {{artists[i]}} "></option>
+                {% endfor%}
+            </datalist>
+            <input type="hidden" name="song-name" id="answer-hidden">
+        </div>
+
+        <button style="margin-top:20px; " type="submit" class="btn btn-lg">Recommend</button>
+    </form>
+</div>
+
+<script>
+
+    document.querySelector('input[list]').addEventListener('input', function (e) {
+        var input = e.target,
+            list = input.getAttribute('list'),
+            options = document.querySelectorAll('#' + list + ' option'),
+            hiddenInput = document.getElementById(input.getAttribute('id') + '-hidden'),
+            label = input.value;
+
+        hiddenInput.value = label;
+
+        for (var i = 0; i < options.length; i++) {
+            var option = options[i];
+
+            if (option.innerText === label) {
+                hiddenInput.value = option.getAttribute('data-value');
+                console.log(hiddenInput.value)
+                break;
+            }
+        }
+    });
+</script>
+
+{% endblock %}
+
+{%block result %}
+<div class="row mx-5 px-5 mt-4 pt-4">
+    {% for i in range(size1)%}
+    <div class="col-sm-4 mb-3 pb-4 mb-sm-0">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{returnsongs[i]}}</h5>
+                <p class="card-text">Artist: {{returnartists[i]}}</p>
+                <p class="card-text">Album: {{returnalbum[i]}}</p>
+                <a href="http://open.spotify.com/track/{{returnid[i]}}" class="btn">Listen on Spotify</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock%}

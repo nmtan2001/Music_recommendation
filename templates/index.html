@@ -1,49 +1,19 @@
 {% extends "layout.html" %}
 {% block body%}
 <div class="mx-5 px-5 mt-4">
-    <form action="" method="post" class="px-5 mx-5">
+    <form action="/recommendation" method="post" class="px-5 mx-5">
         <div class="form-group">
-            <label class="fs-4" for="text">Select Song</label>
-
-            <select name="names" class="form-control">
-                {% for i in name %}
-                <option value="{{i}}">{{i}}</option>
-                {% endfor %}
-            </select>
+            <label for="song-name" class="fs-5">Select song</label>
+            <input type="text" name="song-name" id="song-name" list="song-list" class="form-control">
+            <datalist id="song-list">
+                {%for i in range(size) :%}
+                <option value="{{names[i]}} by {{artists[i]}} "></option>
+                {% endfor%}
+            </datalist>
         </div>
 
-        <button style="margin-top:20px; " type="submit" class="btn btn-primary btn-lg">Recommend</button>
+        <button style="margin-top:20px; " type="submit" class="btn btn-lg">Recommend</button>
     </form>
 </div>
-{% endblock %}
-{%block result %}
-<div class="row mx-5 px-5 mt-4 pt-4">
-    {% for list in lists%}
-    <div class="col-sm-4 mb-3 mb-sm-0">
-        <div class="card">
-            <div class="card-body">
-                <!-- <h5 class="card-title">Special title treatment</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
-                {{list}}
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
-</div>
 
-<div class="row mx-5 px-5 mt-4 pt-4">
-    {% for list in lists1%}
-    <div class="col-sm-4 mb-3 mb-sm-0">
-        <div class="card">
-            <div class="card-body">
-                <!-- <h5 class="card-title">Special title treatment</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
-                {{list}}
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
-</div>
-{% endblock%}
+{% endblock %}
