@@ -1,3 +1,4 @@
+import datetime
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.model_selection import train_test_split
@@ -16,14 +17,25 @@ music_features = df[['danceability', 'energy', 'key', 'mode',
 music_features_scaled = scaler.fit_transform(music_features)
 
 
-def test(a, b):
-    print(a)
-    print(b)
-    return a
+def convert_release_date(release_date):
+
+    try:
+        # Check if the release_date is in %Y format.
+        release_date_datetime = datetime.strptime(release_date, "%Y")
+    except ValueError:
+        # If it is not in %Y format, return the original release_date.
+        return release_date
+
+    # If the release_date is in %Y format, convert it to year_01_01 format.
+    release_date_datetime = release_date_datetime.replace(month=1, day=1)
+    release_date = release_date_datetime.strftime("%Y-%m-%d")
+
+    return release_date
 
 
 def calculate_weighted_popularity(release_date):
     # Convert the release date to datetime object
+    release_date = convert_release_date(release_date)
     release_date = datetime.strptime(release_date, '%Y-%m-%d')
 
     # Calculate the time span between release date and today's date
@@ -41,11 +53,6 @@ def content_based_recommendations(input_song_name, input_artist_name, num_recomm
         input_song_name, case=False, na=False))
     art = (df['artists'].str.contains(
         input_artist_name, case=False, na=False))
-
-    # print(song.head())
-    # print(art.head())
-    # print(input_song_name)
-    # print(input_artist_name)
 
     matching_song_indices = df[song & art].index
     print(matching_song_indices[0])
@@ -69,20 +76,6 @@ def content_based_recommendations(input_song_name, input_artist_name, num_recomm
         'track_name', 'artists', 'album_name', 'track_id', 'popularity']]
 
     return content_based_recommendations
-
-
-# def printoutt(song_name, artist_name, num_recommendations=5):
-#     # song_name = 'Tief'
-#     # artist_name = 'Paul Kalkbrenner'
-#     recommendations = content_based_recommendations(
-#         song_name, artist_name, num_recommendations)
-#     return recommendations
-#     # Print the recommendations.
-#     print(f"CB recommended songs for '{song_name}':")
-#     print(recommendations)
-
-
-# print(content_based_recommendations('Lolly', 'Rill'))
 
 
 # a function to get hybrid recommendations based on weighted popularity
@@ -131,19 +124,9 @@ def hybrid_recommendations(input_song_name, input_artist_name, num_recommendatio
     return hybrid_recommendations
 
 
-def printout(song_name, artist_name, num_recommendations=5):
-    # song_name = 'Into The Night'
-    # artist_name = 'YOASOBI'
+def printout(song_name, artist_name, num_recommendations=6):
     recommendations = hybrid_recommendations(
         song_name, artist_name, num_recommendations)
-    print(f"Hybrid recommended songs for '{song_name}':")
-    print(recommendations)
+    # print(f"Hybrid recommended songs for '{song_name}':")
+    # print(recommendations)
     return recommendations
-    # Print the recommendations.
-    print(f"Hybrid recommended songs for '{song_name}':")
-    print(recommendations)
-
-
-# printout('Into The Night', 'YOASOBI')
-
-# printout(5)

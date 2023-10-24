@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+{% block result %}
+<!-- https://memegen.link/ -->
+<div class="d-flex justify-content-center">
+    <img alt="{{ top }}" class="border img-fluid" style=" width: 300px"
+        src="http://memegen.link/custom/{{ top | urlencode }}/{{ bottom | urlencode }}.jpg?alt=https://ih0.redbubble.net/image.3510672417.8841/raf,360x360,075,t,fafafa:ca443f4786.jpg"
+        title="{{ top }}">
+</div>
+{% endblock %}
