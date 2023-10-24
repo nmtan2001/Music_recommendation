@@ -136,6 +136,8 @@ def printout(song_name, artist_name, num_recommendations=5):
     # artist_name = 'YOASOBI'
     recommendations = hybrid_recommendations(
         song_name, artist_name, num_recommendations)
+    print(f"Hybrid recommended songs for '{song_name}':")
+    print(recommendations)
     return recommendations
     # Print the recommendations.
     print(f"Hybrid recommended songs for '{song_name}':")

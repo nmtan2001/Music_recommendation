@@ -18,10 +18,13 @@ app = Flask(__name__)
 def recommendation():
     song_request = request.form.get("song-name")
     song_name, artist_name = song_request.split(" by ")
-    # test(song_name, artist_name)
     # return render_template("test.html", song=song_name, art=artist_name, test=test)
 
-    returndf = content_based_recommendations(song_name, 'Rill')
+    returndf = printout("Lolly", "Rill")
+
+    # returndf = content_based_recommendations(song_name, artist_name)
+
+    # returndf = content_based_recommendations(song_name, artist_name)
 
     # display result
     returnsongs = list(returndf['track_name'].values)
