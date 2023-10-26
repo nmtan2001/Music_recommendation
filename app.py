@@ -5,7 +5,7 @@ import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.model_selection import train_test_split
-from algo import printout, apology, content_based_recommendations
+from algo import printout, apology, content_based_recommendations, genre_recommendations
 
 df = pd.read_csv('final.csv')
 
@@ -34,24 +34,53 @@ def recommendation():
     returnartists = list(returndf['artists'].values)
     returnalbum = list(returndf['album_name'].values)
     returnid = list(returndf['track_id'].values)
-    size1 = len(returnsongs)
+    sizeres = len(returnsongs)
 
     # display search
     names = list(df['track_name'].values)
     artists = list(df['artists'].values)
-    id = list(df['track_id'].values)
+    genre = df["track_genre"].unique()
     size = len(artists)
+    sizegenre = len(genre)
 
-    return render_template("result.html",  names=names, artists=artists, size=size, id=id, returnsongs=returnsongs,  returnartists=returnartists, returnalbum=returnalbum, returnid=returnid, size1=size1)
+    return render_template("result.html",  names=names, artists=artists, size=size, genre=genre, sizegenre=sizegenre, returnsongs=returnsongs,  returnartists=returnartists, returnalbum=returnalbum, returnid=returnid, sizeres=sizeres)
+
+
+@app.route("/genre", methods=["POST"])
+def genre():
+    # handle errors
+    if not request.form.get("genre-name"):
+        return apology("missing genre", 400)
+    genre_request = request.form.get('genre-name')
+
+    if genre_recommendations(genre_request) is None:
+        return apology("no match")
+    returndf = genre_recommendations(genre_request)
+
+    # display result
+    returnsongs = list(returndf['track_name'].values)
+    returnartists = list(returndf['artists'].values)
+    returnalbum = list(returndf['album_name'].values)
+    returnid = list(returndf['track_id'].values)
+    sizeres = len(returnsongs)
+
+    # display search
+    names = list(df['track_name'].values)
+    artists = list(df['artists'].values)
+    genre = df["track_genre"].unique()
+    size = len(artists)
+    sizegenre = len(genre)
+    return render_template("result.html",  names=names, artists=artists, size=size, genre=genre, sizegenre=sizegenre, returnsongs=returnsongs,  returnartists=returnartists, returnalbum=returnalbum, returnid=returnid, sizeres=sizeres)
 
 
 @app.route("/")
 def index():
     names = list(df['track_name'].values)
     artists = list(df['artists'].values)
-    id = list(df['track_id'].values)
+    genre = df["track_genre"].unique()
     size = len(artists)
-    return render_template("index.html",  names=names, artists=artists, size=size, id=id)
+    sizegenre = len(genre)
+    return render_template("index.html",  names=names, artists=artists, size=size, genre=genre, sizegenre=sizegenre)
 
 
 def handleSplit(song_request):
