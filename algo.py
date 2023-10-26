@@ -18,9 +18,6 @@ music_features = df[['danceability', 'energy', 'key', 'mode',
                      'instrumentalness', 'liveness', 'valence', 'tempo']].values
 music_features_scaled = scaler.fit_transform(music_features)
 
-# a = list(df["track_genre"].unique())
-# print(a)
-
 
 def genre_recommendations(genre, num_recommendations=6):
     genre = genre[0].lower() + genre[1:]
@@ -29,11 +26,7 @@ def genre_recommendations(genre, num_recommendations=6):
     if same_genre.empty:
         return
     same_genre = df.loc[df['track_genre'] == genre].sample(num_recommendations)
-    # print(same_genre)
     return same_genre
-
-
-# print(genre_recommendations('aaaaaaaaaa'))
 
 
 def convert_release_date(release_date):
@@ -107,18 +100,8 @@ def content_based_recommendations(input_song_name, input_artist_name, num_recomm
 
     return content_based_recommendations
 
-
-# def printoutt(song_name, artist_name, num_recommendations=6):
-#     recommendations = content_based_recommendations(
-#         song_name, artist_name, num_recommendations)
-#     print(f"Content recommended songs for '{song_name}':")
-#     print(recommendations)
-#     return recommendations
-
-
-# printoutt("It's All Coming Back To Me Now (Glee Cast Version)", "Glee Cast")
-
 # a function to get hybrid recommendations based on weighted popularity
+
 
 def hybrid_recommendations(input_song_name, input_artist_name, num_recommendations=5, alpha=0.5):
 
@@ -167,9 +150,6 @@ def printout(song_name, artist_name, num_recommendations=6):
     # print(f"Hybrid recommended songs for '{song_name}':")
     # print(recommendations)
     return recommendations
-
-
-# printout("It's All Coming Back To Me Now (Glee Cast Version)", "Glee Cast")
 
 
 def apology(message, code=400):
