@@ -1,11 +1,7 @@
 from flask import Flask, flash, redirect, render_template, request, session, get_flashed_messages
-from flask_session import Session
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.model_selection import train_test_split
-from algo import printout, apology, content_based_recommendations, genre_recommendations
+from algo import printout, apology, genre_recommendations
 
 df = pd.read_csv('final.csv')
 

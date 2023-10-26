@@ -4,7 +4,6 @@ import datetime
 from flask import Flask, render_template
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.model_selection import train_test_split
 from datetime import datetime
 import warnings
 warnings.filterwarnings("ignore")
@@ -12,6 +11,7 @@ warnings.filterwarnings("ignore")
 df = pd.read_csv('final.csv')
 
 # Normalize the music features using Min-Max scaling
+"""https://towardsdatascience.com/everything-you-need-to-know-about-min-max-normalization-in-python-b79592732b79"""
 scaler = MinMaxScaler()
 music_features = df[['danceability', 'energy', 'key', 'mode',
                      'loudness',  'speechiness', 'acousticness',
@@ -58,17 +58,6 @@ def calculate_weighted_popularity(release_date):
     return weight
 
 
-def trim_all_columns(df):
-    """
-    Trim whitespace from ends of each value across all series in dataframe
-    """
-    def trim_strings(x): return x.strip() if isinstance(x, str) else x
-    return df.applymap(trim_strings)
-
-
-df = trim_all_columns(df)
-
-
 def content_based_recommendations(input_song_name, input_artist_name, num_recommendations=5):
 
     # Get the indices of the songs in the dataset that match the input song name.
@@ -85,6 +74,8 @@ def content_based_recommendations(input_song_name, input_artist_name, num_recomm
 
     # Get the index of the input song in the dataset.
     input_song_index = matching_song_indices[0]
+
+    """ https://towardsdatascience.com/using-cosine-similarity-to-build-a-movie-recommendation-system-ae7f20842599"""
 
     # Calculate the similarity scores based on music features (cosine similarity).
     similarity_scores = cosine_similarity(
