@@ -1,12 +1,13 @@
+import pandas as pd
+import numpy as np
 import datetime
 from flask import Flask, render_template
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.model_selection import train_test_split
 from datetime import datetime
-
-import numpy as np
-import pandas as pd
+import warnings
+warnings.filterwarnings("ignore")
 
 df = pd.read_csv('final.csv')
 
@@ -16,6 +17,16 @@ music_features = df[['danceability', 'energy', 'key', 'mode',
                      'loudness',  'speechiness', 'acousticness',
                      'instrumentalness', 'liveness', 'valence', 'tempo']].values
 music_features_scaled = scaler.fit_transform(music_features)
+
+
+def genre_recommendations(genre, num_recommendations=6):
+    genre = genre[0].lower() + genre[1:]
+    print(genre)
+    same_genre = df.loc[df['track_genre'] == genre]
+    if same_genre.empty:
+        return
+    same_genre = df.loc[df['track_genre'] == genre].sample(num_recommendations)
+    return same_genre
 
 
 def convert_release_date(release_date):
@@ -47,16 +58,27 @@ def calculate_weighted_popularity(release_date):
     return weight
 
 
+def trim_all_columns(df):
+    """
+    Trim whitespace from ends of each value across all series in dataframe
+    """
+    def trim_strings(x): return x.strip() if isinstance(x, str) else x
+    return df.applymap(trim_strings)
+
+
+df = trim_all_columns(df)
+
+
 def content_based_recommendations(input_song_name, input_artist_name, num_recommendations=5):
 
     # Get the indices of the songs in the dataset that match the input song name.
+
     song = (df['track_name'].str.contains(
-        input_song_name, case=False, na=False))
+        input_song_name, case=False, na=False, regex=False))
     art = (df['artists'].str.contains(
-        input_artist_name, case=False, na=False))
+        input_artist_name, case=False, na=False, regex=False))
 
     matching_song_indices = df[song & art].index
-    # print(matching_song_indices[0])
     # If no songs match the input song name, return an empty list.
     if len(matching_song_indices) == 0:
         return
@@ -78,17 +100,6 @@ def content_based_recommendations(input_song_name, input_artist_name, num_recomm
 
     return content_based_recommendations
 
-
-def printoutt(song_name, artist_name, num_recommendations=6):
-    recommendations = content_based_recommendations(
-        song_name, artist_name, num_recommendations)
-    print(f"Hybrid recommended songs for '{song_name}':")
-    print(recommendations)
-    return recommendations
-
-
-# if printoutt('aaaaaa', 'bbbbbb') is None:
-#     print('0')
 # a function to get hybrid recommendations based on weighted popularity
 
 
@@ -103,9 +114,9 @@ def hybrid_recommendations(input_song_name, input_artist_name, num_recommendatio
 
     # Get the indices of the songs in the dataset that match the input song name.
     song = (df['track_name'].str.contains(
-        input_song_name, case=False, na=False))
+        input_song_name, case=False, na=False, regex=False))
     art = (df['artists'].str.contains(
-        input_artist_name, case=False, na=False))
+        input_artist_name, case=False, na=False, regex=False))
 
     matching_song_indices = df[song & art].index[0]
     # # Get the popularity score of the input song
@@ -141,16 +152,13 @@ def printout(song_name, artist_name, num_recommendations=6):
     return recommendations
 
 
-# if printout('Lolly', 'Rill') is None:
-#     print('oh no')
-
-
 def apology(message, code=400):
     """Render message as an apology to user."""
     names = list(df['track_name'].values)
     artists = list(df['artists'].values)
-    id = list(df['track_id'].values)
+    genre = df["track_genre"].unique()
     size = len(artists)
+    sizegenre = len(genre)
 
     def escape(s):
         """
@@ -162,4 +170,4 @@ def apology(message, code=400):
                          ("%", "~p"), ("#", "~h"), ("/", "~s"), ("\"", "''")]:
             s = s.replace(old, new)
         return s
-    return render_template("apology.html", top=code, bottom=escape(message),  names=names, artists=artists, size=size, id=id), code
+    return render_template("apology.html", top=code, bottom=escape(message),  names=names, artists=artists, size=size, genre=genre, sizegenre=sizegenre), code
